@@ -22,9 +22,22 @@
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
   </ItemGroup>
 
+  <!-- DynamicQuery.Parser is an internal (IsPackable=false) project. PrivateAssets="all"
+       stops NuGet from emitting an unresolvable package dependency on it; the target below
+       bundles its assembly into this package so DynamicQuery.NetFramework restores stand-alone. -->
   <ItemGroup>
-    <ProjectReference Include="..\DynamicQuery.Parser\DynamicQuery.Parser.csproj" />
+    <ProjectReference Include="..\DynamicQuery.Parser\DynamicQuery.Parser.csproj" PrivateAssets="all" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeProjectReferencesInPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+
+  <Target Name="IncludeProjectReferencesInPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
