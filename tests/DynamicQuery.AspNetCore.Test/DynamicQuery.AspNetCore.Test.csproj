@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DynamicQuery.AspNetCore\DynamicQuery.AspNetCore.csproj" />
+    <!-- DynamicQuery.AspNetCore bundles DynamicQuery.Parser privately, so the Parser
+         assembly no longer flows transitively; reference it directly for the types
+         (e.g. DynamicQueryModel<T>) surfaced through the public API. -->
+    <ProjectReference Include="..\..\src\DynamicQuery.Parser\DynamicQuery.Parser.csproj" />
   </ItemGroup>
 
 </Project>
